@@ -1,0 +1,80 @@
+.outline-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  min-height: 24px;
+  padding: 2px 0;
+}
+
+.outline-item-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 4px;
+  user-select: none;
+}
+
+.outline-item-line-number {
+  min-width: 24px;
+  text-align: right;
+  color: #666;
+  font-size: 12px;
+  font-family: monospace;
+  user-select: none;
+}
+
+.outline-item-checkbox {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.outline-item-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+  color: #666;
+  font-size: 12px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.outline-item-toggle:hover {
+  color: #333;
+}
+
+.outline-item-text {
+  flex: 1;
+  outline: none;
+  border: none;
+  background: transparent;
+  padding: 2px 4px;
+  min-height: 20px;
+  display: inline-block;
+  width: 100%;
+  user-select: text;
+}
+
+.outline-item-text .ProseMirror-trailingBreak {
+  display: none;
+}
+
+.outline-item-text:focus {
+  background: rgba(0, 123, 255, 0.1);
+  border-radius: 2px;
+}
+
+/* Collapsed state */
+.outline-item[data-collapsed="true"] .outline-item-toggle {
+  color: #007bff;
+}
+
+/* Task item styles */
+.outline-item[data-item-type="task"] .outline-item-text {
+  text-decoration: var(--checked, none);
+}
+
+.outline-item[data-item-type="task"][data-checked="true"] .outline-item-text {
+  --checked: line-through;
+  opacity: 0.6;
+}
