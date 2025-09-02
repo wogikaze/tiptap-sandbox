@@ -9,17 +9,7 @@
 .outline-item-content {
   display: flex;
   align-items: center;
-  width: 100%;
   gap: 4px;
-  user-select: none;
-}
-
-.outline-item-line-number {
-  min-width: 24px;
-  text-align: right;
-  color: #666;
-  font-size: 12px;
-  font-family: monospace;
   user-select: none;
 }
 

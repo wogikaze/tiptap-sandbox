@@ -40,8 +40,6 @@ export const OutlineItemComponent: React.FC<OutlineItemComponentProps> = ({
       data-item-type={type}
     >
       <div className="outline-item-content">
-        <span className="outline-item-line-number">{level + 1}</span>
-
         {type === "task" && (
           <input
             type="checkbox"
