@@ -1,0 +1,56 @@
+﻿name: "Feature request"
+description: "Propose a feature aligned with the roadmap phase"
+labels:
+  - "type:feature"
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: "Summary"
+      description: "One-line summary"
+      placeholder: "e.g., Add indent/outdent command for outline items"
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: "Roadmap Phase"
+      description: "Select the targeted phase"
+      options:
+        - "P0"
+        - "P1"
+        - "P2"
+        - "P3"
+        - "P4"
+        - "P5"
+        - "P6"
+        - "P7"
+        - "P8"
+        - "P9"
+        - "P10"
+        - "P11"
+        - "P12"
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: "Details"
+      description: "User story, scope, out of scope"
+      placeholder: "As a <user>, I want ..."
+      render: markdown
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "Acceptance Criteria"
+      description: "Bullet points (Given/When/Then)"
+      render: markdown
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Checklist"
+      options:
+        - label: "Tests added/updated"
+        - label: "Docs updated (AGENTS.md/README)"
+        - label: "Performance noted (data size, FPS)"
+        - label: "UI screenshots/GIFs attached (if applicable)"
