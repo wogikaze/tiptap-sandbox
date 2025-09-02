@@ -1,0 +1,45 @@
+name: Chore / Task
+description: Non-feature work (refactor, infra, docs, CI)
+labels:
+  - type: chore
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One-line summary
+      placeholder: e.g., Add Prettier and format script
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What changes, what’s out of scope
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Related Phase (if any)
+      options:
+        - None
+        - P0
+        - P1
+        - P2
+        - P3
+        - P4
+        - P5
+        - P6
+        - P7
+        - P8
+        - P9
+        - P10
+        - P11
+        - P12
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: No functional behavior change (if refactor)
+        - label: CI updated (if needed)
+        - label: Docs updated (if needed)

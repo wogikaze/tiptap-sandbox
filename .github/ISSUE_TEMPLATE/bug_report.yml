@@ -1,0 +1,67 @@
+name: Bug report
+description: Report a defect with steps and expected behavior
+labels:
+  - type: bug
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One-line summary
+      placeholder: e.g., Collapse toggle fails after indent
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Numbered steps with minimal repro
+      placeholder: |
+        1. Open editor
+        2. Create outline item ...
+        3. Press Tab ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Affected Phase
+      options:
+        - P0
+        - P1
+        - P2
+        - P3
+        - P4
+        - P5
+        - P6
+        - P7
+        - P8
+        - P9
+        - P10
+        - P11
+        - P12
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      placeholder: OS, Browser/Version, Node version
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: Minimal repro attached or described
+        - label: Logs/console output attached (if relevant)
+        - label: Screenshots/GIFs attached (if UI)
