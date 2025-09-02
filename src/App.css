@@ -1,0 +1,7 @@
+.ProseMirror {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 1rem;
+  min-height: 200px;
+  outline: none;
+}

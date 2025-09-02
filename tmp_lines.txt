@@ -1,0 +1,81 @@
+  1: # Requires: GitHub CLI (`gh`) and repo with Issues enabled.
+  2: # Creates issues for phases P0?P12 based on the roadmap, with labels.
+  3: param(
+  4:   [string]$Phase = "P1",
+  5:   [switch]$All
+  6: )
+  7: 
+  8: # Basic guards
+  9: if (-not (Get-Command gh -ErrorAction SilentlyContinue)) {
+ 10:   Write-Error "GitHub CLI 'gh' is required. Install from https://cli.github.com/"; exit 1
+ 11: }
+ 12: 
+ 13: # Ensure labels exist (reuses our scripts if present)
+ 14: $labelsPs1 = Join-Path $PSScriptRoot 'create-labels.ps1'
+ 15: if (Test-Path $labelsPs1) {
+ 16:   & $labelsPs1
+ 17: }
+ 18: 
+ 19: # Roadmap path
+ 20: $roadmapPath = Join-Path $PSScriptRoot '..' 'tiptapアウトライナ→共同編集ノートアプリロードマップ.md'
+ 21: if (-not (Test-Path $roadmapPath)) {
+ 22:   Write-Error "Roadmap file not found: $roadmapPath"; exit 1
+ 23: }
+ 24: 
+ 25: # Parse roadmap sections roughly to extract bullets per phase
+ 26: $raw = Get-Content -Raw -Path $roadmapPath
+ 27: 
+ 28: # Helper: build issue for one phase
+ 29: function New-PhaseIssue {
+ 30:   param(
+ 31:     [Parameter(Mandatory)] [string]$Phase
+ 32:   )
+ 33: 
+ 34:   $title = "${Phase}: ロードマップ実行タスク"
+ 35: 
+ 36:   # Grab section by phase header markers like "**P1: ...**" until next "**P"
+ 37:   $pattern = "\*\*${Phase}:([\s\S]*?)(?=\*\*P[0-9]{1,2}:|\Z)"
+ 38:   $m = [regex]::Match($raw, $pattern)
+ 39:   if (-not $m.Success) {
+ 40:     Write-Warning "Phase section not found for $Phase. Skipping."
+ 41:     return
+ 42:   }
+ 43: 
+ 44:   $section = $m.Groups[1].Value.Trim()
+ 45: 
+ 46:   # Build body with checklists from bullets
+ 47:   $lines = $section -split "`n" | Where-Object { $_.Trim() -ne '' }
+ 48:   $checklist = @()
+ 49:   foreach ($line in $lines) {
+ 50:     $t = ($line -replace '^\s*-\s*', '').Trim()
+ 51:     if ($t -ne '') { $checklist += "- [ ] $t" }
+ 52:   }
+ 53: 
+ 54:   $body = @()
+ 55:   $body += "フェーズ: ${Phase}"
+ 56:   $body += "\n概要: ロードマップに基づく実装タスクのトラッキング。"
+ 57:   $body += "\n受け入れ基準や補足はロードマップ記載を参照。"
+ 58:   if ($checklist.Count -gt 0) {
+ 59:     $body += "\nタスク:"
+ 60:     $body += ($checklist -join "`n")
+ 61:   }
+ 62:   $bodyText = $body -join "`n`n"
+ 63: 
+ 64:   $labels = @("phase:${Phase}", "type:task")
+ 65: 
+ 66:   # Create or ensure issue doesn't duplicate by title
+ 67:   $existing = gh issue list --search "in:title $title" --json number,title | ConvertFrom-Json
+ 68:   if ($existing -and $existing.title -contains $title) {
+ 69:     Write-Host "Issue already exists for $Phase: $($title)"; return
+ 70:   }
+ 71: 
+ 72:   gh issue create --title $title --body $bodyText --label ($labels -join ',') | Out-Host
+ 73: }
+ 74: 
+ 75: if ($All) {
+ 76:   0..12 | ForEach-Object { New-PhaseIssue -Phase ("P{0}" -f $_) }
+ 77: } else {
+ 78:   New-PhaseIssue -Phase $Phase
+ 79: }
+ 80: 
+
