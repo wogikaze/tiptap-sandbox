@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import Text from "@tiptap/extension-text";
 import HardBreak from "@tiptap/extension-hard-break";
+import History from "@tiptap/extension-history";
 import { OutlineItem } from "./extensions/OutlineItem";
 import { generateDummyData, dummyDataToHTML } from "./utils/dummyData";
 import "./App.css";
@@ -18,6 +19,7 @@ const App = () => {
       Document.configure({ content: "outline_item+" }),
       Text,
       HardBreak,
+      History,
       OutlineItem,
     ],
     content: dummyDataToHTML(dummyData),

@@ -99,6 +99,89 @@ export const OutlineItem = Node.create({
 
         return false;
       },
+      Tab: ({ editor }) => {
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        if ($from.parent.type.name === 'outline_item') {
+          const currentLevel = $from.parent.attrs.level;
+          editor.commands.updateAttributes('outline_item', {
+            level: currentLevel + 1,
+          });
+          return true;
+        }
+
+        return false;
+      },
+      'Shift-Tab': ({ editor }) => {
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        if ($from.parent.type.name === 'outline_item') {
+          const currentLevel = $from.parent.attrs.level;
+          if (currentLevel > 0) {
+            editor.commands.updateAttributes('outline_item', {
+              level: currentLevel - 1,
+            });
+          }
+          return true;
+        }
+
+        return false;
+      },
+      Space: ({ editor }) => {
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        if ($from.parent.type.name === 'outline_item' && $from.parentOffset === 0) {
+          const currentLevel = $from.parent.attrs.level;
+          editor.commands.updateAttributes('outline_item', {
+            level: currentLevel + 1,
+          });
+          return true;
+        }
+
+        return false;
+      },
+      Backspace: ({ editor }) => {
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        if ($from.parent.type.name === 'outline_item') {
+          if (selection.empty && $from.parentOffset === 0) {
+            // カーソルが行頭にある場合
+            const currentLevel = $from.parent.attrs.level;
+            if (currentLevel > 0) {
+              editor.commands.updateAttributes('outline_item', {
+                level: currentLevel - 1,
+              });
+            } else {
+              // レベル0なら行を削除
+              if ($from.parent.textContent.length === 0) {
+                editor.commands.deleteNode('outline_item');
+              } else {
+                const prevNode = $from.before() > 0 ? editor.state.doc.resolve($from.before() - 1).parent : null;
+                if (prevNode && prevNode.type.name === 'outline_item') {
+                  editor.commands.join();
+                } else {
+                  editor.commands.deleteNode('outline_item');
+                }
+              }
+            }
+            return true;
+          } else if (!selection.empty) {
+            // 選択範囲がある場合は削除
+            editor.commands.deleteSelection();
+            return true;
+          }
+        }
+
+        return false;
+      },
     };
   },
 
