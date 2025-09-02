@@ -27,6 +27,11 @@
   font-size: 12px;
   line-height: 1;
   flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .outline-item-toggle:hover {
@@ -45,9 +50,7 @@
   user-select: text;
 }
 
-.outline-item-text .ProseMirror-trailingBreak {
-  display: none;
-}
+
 
 .outline-item-text:focus {
   background: rgba(0, 123, 255, 0.1);

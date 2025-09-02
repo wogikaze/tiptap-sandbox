@@ -7,7 +7,7 @@ export const OutlineItem = Node.create({
 
   group: 'block',
 
-  content: 'text*',
+  content: 'inline*',
 
   addAttributes() {
     return {
@@ -69,6 +69,37 @@ export const OutlineItem = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return ['div', { ...HTMLAttributes, 'data-type': 'outline_item' }, 0]
+  },
+
+  addKeyboardShortcuts() {
+    return {
+      Enter: ({ editor }) => {
+        const { state } = editor;
+        const { selection } = state;
+        const { $from } = selection;
+
+        // 現在のノードがOutlineItemの場合
+        if ($from.parent.type.name === 'outline_item') {
+          // splitBlockを使って新しいOutlineItemを作成
+          editor.commands.splitBlock();
+
+          // 新しいノードの属性を設定
+          const { $to } = editor.state.selection;
+          if ($to.parent.type.name === 'outline_item') {
+            editor.commands.updateAttributes('outline_item', {
+              id: `item-${Date.now()}`,
+              level: $from.parent.attrs.level,
+              collapsed: false,
+              type: 'normal',
+            });
+          }
+
+          return true;
+        }
+
+        return false;
+      },
+    };
   },
 
   addNodeView() {
