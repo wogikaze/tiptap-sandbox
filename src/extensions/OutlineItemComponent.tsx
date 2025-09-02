@@ -40,6 +40,14 @@ export const OutlineItemComponent: React.FC<OutlineItemComponentProps> = ({
       data-item-type={type}
     >
       <div className="outline-item-content">
+        <button
+          onClick={toggleCollapse}
+          className="outline-item-toggle"
+          type="button"
+        >
+          {collapsed ? "▶" : "▼"}
+        </button>
+
         {type === "task" && (
           <input
             type="checkbox"
@@ -48,14 +56,6 @@ export const OutlineItemComponent: React.FC<OutlineItemComponentProps> = ({
             className="outline-item-checkbox"
           />
         )}
-
-        <button
-          onClick={toggleCollapse}
-          className="outline-item-toggle"
-          type="button"
-        >
-          {collapsed ? "▶" : "▼"}
-        </button>
 
         <NodeViewContent className="outline-item-text" />
       </div>
