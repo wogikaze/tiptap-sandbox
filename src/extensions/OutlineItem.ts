@@ -68,7 +68,35 @@ export const OutlineItem = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', { ...HTMLAttributes, 'data-type': 'outline_item' }, 0]
+    return [
+      'div',
+      {
+        ...HTMLAttributes,
+        'data-type': 'outline_item',
+        'class': 'outline-item',
+        'data-level': HTMLAttributes.level,
+        'data-collapsed': HTMLAttributes.collapsed,
+        'data-item-type': HTMLAttributes.type,
+        'style': `margin-left: ${HTMLAttributes.level * 20}px`,
+      },
+      [
+        'div',
+        { 'class': 'outline-item-content' },
+        [
+          'button',
+          {
+            'class': 'outline-item-toggle',
+            'type': 'button'
+          },
+          HTMLAttributes.collapsed ? '▶' : '▼'
+        ],
+        [
+          'div',
+          { 'class': 'outline-item-text' },
+          0
+        ]
+      ]
+    ]
   },
 
   addKeyboardShortcuts() {
@@ -80,21 +108,30 @@ export const OutlineItem = Node.create({
 
         // 現在のノードがOutlineItemの場合
         if ($from.parent.type.name === 'outline_item') {
-          // splitBlockを使って新しいOutlineItemを作成
-          editor.commands.splitBlock();
+          const parent = $from.parent;
+          const isAtEnd = $from.parentOffset === parent.content.size;
 
-          // 新しいノードの属性を設定
-          const { $to } = editor.state.selection;
-          if ($to.parent.type.name === 'outline_item') {
-            editor.commands.updateAttributes('outline_item', {
-              id: `item-${Date.now()}`,
-              level: $from.parent.attrs.level,
-              collapsed: false,
-              type: 'normal',
-            });
+          if (isAtEnd) {
+            // 行末の場合、新しいOutlineItemを作成
+            editor.commands.splitBlock();
+
+            // 新しいノードの属性を設定
+            const { $to } = editor.state.selection;
+            if ($to.parent.type.name === 'outline_item') {
+              editor.commands.updateAttributes('outline_item', {
+                id: `item-${Date.now()}`,
+                level: $from.parent.attrs.level,
+                collapsed: false,
+                type: 'normal',
+              });
+            }
+
+            return true;
+          } else {
+            // 行末でない場合、通常の改行を挿入
+            editor.commands.setHardBreak();
+            return true;
           }
-
-          return true;
         }
 
         return false;
@@ -166,7 +203,7 @@ export const OutlineItem = Node.create({
               } else {
                 const prevNode = $from.before() > 0 ? editor.state.doc.resolve($from.before() - 1).parent : null;
                 if (prevNode && prevNode.type.name === 'outline_item') {
-                  editor.commands.join();
+                  editor.commands.joinBackward();
                 } else {
                   editor.commands.deleteNode('outline_item');
                 }

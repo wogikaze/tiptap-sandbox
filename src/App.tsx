@@ -1,8 +1,7 @@
 import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import Document from "@tiptap/extension-document";
-import Text from "@tiptap/extension-text";
 import HardBreak from "@tiptap/extension-hard-break";
-import History from "@tiptap/extension-history";
 import { OutlineItem } from "./extensions/OutlineItem";
 import { generateDummyData, dummyDataToHTML } from "./utils/dummyData";
 import "./App.css";
@@ -16,10 +15,24 @@ const App = () => {
 
   const editor = useEditor({
     extensions: [
-      Document.configure({ content: "outline_item+" }),
-      Text,
+      Document.configure({
+        content: "outline_item+",
+      }),
+      StarterKit.configure({
+        heading: false,
+        bold: false,
+        italic: false,
+        strike: false,
+        code: false,
+        bulletList: false,
+        orderedList: false,
+        listItem: false,
+        blockquote: false,
+        codeBlock: false,
+        horizontalRule: false,
+        hardBreak: false,
+      }),
       HardBreak,
-      History,
       OutlineItem,
     ],
     content: dummyDataToHTML(dummyData),

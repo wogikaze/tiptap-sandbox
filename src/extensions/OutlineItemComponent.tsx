@@ -1,26 +1,19 @@
 import React from "react";
-import { NodeViewWrapper, NodeViewContent } from "@tiptap/react";
+import { NodeViewWrapper, NodeViewContent, NodeViewProps } from "@tiptap/react";
 
-interface OutlineItemComponentProps {
-  node: {
-    attrs: {
-      id: string;
-      collapsed: boolean;
-      level: number;
-      type: "normal" | "task";
-      checked?: boolean;
-    };
-  };
-  updateAttributes: (
-    attrs: Partial<OutlineItemComponentProps["node"]["attrs"]>,
-  ) => void;
+interface OutlineItemAttributes {
+  id: string;
+  collapsed: boolean;
+  level: number;
+  type: "normal" | "task";
+  checked?: boolean;
 }
 
-export const OutlineItemComponent: React.FC<OutlineItemComponentProps> = ({
+export const OutlineItemComponent: React.FC<NodeViewProps> = ({
   node,
   updateAttributes,
 }) => {
-  const { attrs } = node;
+  const attrs = node.attrs as OutlineItemAttributes;
   const { level, collapsed, type, checked } = attrs;
 
   const toggleCollapse = () => {
@@ -57,7 +50,9 @@ export const OutlineItemComponent: React.FC<OutlineItemComponentProps> = ({
           />
         )}
 
-        <NodeViewContent className="outline-item-text" />
+        <div className="outline-item-text" style={{ whiteSpace: "pre-wrap" }}>
+          <NodeViewContent />
+        </div>
       </div>
     </NodeViewWrapper>
   );

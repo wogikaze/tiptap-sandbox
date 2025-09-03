@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('OutlineItem Enter key creates new item', async ({ page }) => {
   // 開発サーバーが起動していることを前提
-  await page.goto('http://localhost:5173');
+  await page.goto('/');
 
   // エディタが読み込まれるまで待つ
   await page.waitForSelector('.editor-container');
