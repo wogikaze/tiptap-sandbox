@@ -10,7 +10,6 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  user-select: none;
 }
 
 .outline-item-checkbox {
@@ -32,6 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
 }
 
 .outline-item-toggle:hover {
@@ -45,12 +45,38 @@
   background: transparent;
   padding: 2px 4px;
   min-height: 20px;
-  display: inline-block;
+  display: inline-flex;
   width: 100%;
+  user-select: text;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.indent-mark {
+  color: #e0e0e0;
+}
+
+.indent-space {
+  display: inline-flex;
+  width: 1.5em;
+  height: 1em;
+  position: relative;
   user-select: text;
 }
 
-
+.indent-space::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 2px;
+  background: #ccc;
+  border-radius: 50%;
+  opacity: 0.3;
+}
 
 .outline-item-text:focus {
   background: rgba(0, 123, 255, 0.1);

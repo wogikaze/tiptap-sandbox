@@ -79,23 +79,21 @@ export const OutlineItem = Node.create({
         'data-item-type': HTMLAttributes.type,
         'style': `margin-left: ${HTMLAttributes.level * 20}px`,
       },
+
+      [
+        'button',
+        {
+          'class': 'outline-item-toggle',
+          'type': 'button'
+        },
+        HTMLAttributes.collapsed ? '▶' : '▼'
+      ],
       [
         'div',
-        { 'class': 'outline-item-content' },
-        [
-          'button',
-          {
-            'class': 'outline-item-toggle',
-            'type': 'button'
-          },
-          HTMLAttributes.collapsed ? '▶' : '▼'
-        ],
-        [
-          'div',
-          { 'class': 'outline-item-text' },
-          0
-        ]
+        { 'class': 'outline-item-text' },
+        0
       ]
+
     ]
   },
 
